@@ -38,6 +38,7 @@ var statusFormat string
 
 // Status represents the status
 type Status struct {
+	Profile    string
 	Host       string
 	Kubelet    string
 	APIServer  string
@@ -70,6 +71,7 @@ var statusCmd = &cobra.Command{
 			exit.WithError("Error getting host status", err)
 		}
 
+		profileSt := viper.GetString(config.MachineProfile)
 		kubeletSt := state.None.String()
 		kubeconfigSt := state.None.String()
 		apiserverSt := state.None.String()
@@ -121,6 +123,7 @@ var statusCmd = &cobra.Command{
 		}
 
 		status := Status{
+			Profile:    profileSt,
 			Host:       hostSt,
 			Kubelet:    kubeletSt,
 			APIServer:  apiserverSt,

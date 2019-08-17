@@ -18,6 +18,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"os"
 	"strconv"
 
@@ -47,7 +48,11 @@ var profileListCmd = &cobra.Command{
 		if len(validProfiles) == 0 || err != nil {
 			exit.UsageT("No minikube profile was found. You can create one using `minikube start`.")
 		}
+		profile := viper.GetString(config.MachineProfile)
 		for _, p := range validProfiles {
+			if p.Name == profile {
+				p.Name = "* " + p.Name
+			}
 			validData = append(validData, []string{p.Name, p.Config.MachineConfig.VMDriver, p.Config.KubernetesConfig.NodeIP, strconv.Itoa(p.Config.KubernetesConfig.NodePort), p.Config.KubernetesConfig.KubernetesVersion})
 		}
 
